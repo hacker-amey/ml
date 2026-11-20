@@ -1,0 +1,55 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
+--------------
+cols = ['age','workclass','fnlwgt','education','education-num',
+'marital-status','occupation','relationship','race','sex',
+'capital-gain','capital-loss','hours-per-week',
+'native-country','income']
+
+df = pd.read_csv("adult.csv", names=cols, skipinitialspace=True)
+df.head()
+-------------
+
+
+df.replace("?", np.nan, inplace=True)
+
+for c in df.columns:
+    if df[c].dtype == 'object':
+        df[c] = df[c].fillna(df[c].mode()[0])
+    else:
+        df[c] = df[c].fillna(df[c].median())
+
+df.isnull().sum()
+
+--------------
+
+df['income'] = df['income'].map({'<=50K': 0, '>50K': 1})
+
+X = pd.get_dummies(df.drop('income', axis=1), drop_first=True, dtype=int)
+
+X.head()
+
+-------------
+
+normal = MinMaxScaler().fit_transform(X)
+
+normal = pd.DataFrame(normal, columns=X.columns)
+
+normal.head()
+
+-----------
+
+standard = StandardScaler().fit_transform(X)
+
+standard = pd.DataFrame(standard, columns=X.columns)
+
+standard.head()
+
+------------
+
+normal.to_csv("normalized.csv", index=False)
+standard.to_csv("standardized.csv", index=False)
+
+print("Practical Completed Successfully!")
