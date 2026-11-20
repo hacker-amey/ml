@@ -28,25 +28,19 @@ df.isnull().sum()
 --------------
 
 df['income'] = df['income'].map({'<=50K': 0, '>50K': 1})
-
 X = pd.get_dummies(df.drop('income', axis=1), drop_first=True, dtype=int)
-
 X.head()
 
 -------------
 
 normal = MinMaxScaler().fit_transform(X)
-
 normal = pd.DataFrame(normal, columns=X.columns)
-
 normal.head()
 
 -----------
 
 standard = StandardScaler().fit_transform(X)
-
 standard = pd.DataFrame(standard, columns=X.columns)
-
 standard.head()
 
 ------------
